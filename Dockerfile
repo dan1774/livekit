@@ -41,11 +41,13 @@ FROM alpine
 COPY --from=builder /workspace/livekit-server /livekit-server
 
 # Copy config.yaml from your repo into the container
-COPY config.yaml /config.yaml
+COPY --from=builder /workspace/livekit-server /livekit-server
 
+# Copy config and start script
+COPY config.yaml /config.yaml
 COPY start.sh /start.sh
 RUN chmod +x /start.sh
 
-# Run the server with the config file
-ENTRYPOINT ["/start.sh"]
+ENTRYPOINT ["/bin/sh", "/start.sh"]
+
 
