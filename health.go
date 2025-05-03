@@ -11,5 +11,8 @@ func main() {
   })
 
   fmt.Println("Health check running on :8080")
-  http.ListenAndServe(":8080", nil)
+  err := http.ListenAndServe(":8080", nil)
+    if err != nil {
+        fmt.Println("Failed to start health server:", err)
+    }
 }
