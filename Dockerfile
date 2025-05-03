@@ -1,25 +1,44 @@
+FROM golang:1.24-alpine AS builder
+
+ARG TARGETPLATFORM
+ARG TARGETARCH
+RUN echo building for "$TARGETPLATFORM"
+
+WORKDIR /workspace
+
+# Copy Go Modules
+COPY go.mod go.mod
+COPY go.sum go.sum
+RUN go mod download
+
+# Copy source
+COPY cmd/ cmd/
+COPY pkg/ pkg/
+COPY test/ test/
+COPY tools/ tools/
+COPY version/ version/
+
+# Build livekit-server
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=$TARGETARCH GO111MODULE=on go build -a -o livekit-server ./cmd/server
 
-# ========================
-# Final container
-# ========================
+# ===========================
+# Final minimal runtime image
+# ===========================
 FROM alpine
 
-# Install minimal tools to run health server
+# Install Go to build health-server
 RUN apk add --no-cache go
 
-# Copy compiled livekit binary
+# Copy livekit-server and config
 COPY --from=builder /workspace/livekit-server /livekit-server
-
-# Copy config
 COPY config.yaml /config.yaml
 
-# Copy and build health check Go app
+# Copy and build health-server
 COPY health.go /health.go
 RUN go build -o health-server /health.go
 
-#Hey, my app is alive and listening on port 8080 — check here!
+# Expose health check port
 EXPOSE 8080
 
-# Run both livekit and health server
+# Run livekit in background + health server in foreground
 CMD /livekit-server --config /config.yaml & ./health-server
