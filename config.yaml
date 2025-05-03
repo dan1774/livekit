@@ -1,3 +1,7 @@
+port: 7880
+
+development: true
+
 keys:
   livekit_test_key_ABC123: 2l7NPeKWnujt7kvonAn117V563JsljULDLhoA3nopVyel1YuBAgexVVLNn4UVZRpDoYXAHX7TR6m4PXdzhebQ0D8oz2Qnra6SdImFK992BH6ywybHUlBMO9R0dp8wp3D
   
