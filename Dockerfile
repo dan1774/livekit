@@ -47,7 +47,7 @@ COPY --from=builder /workspace/livekit-server /livekit-server
 COPY config.yaml /config.yaml
 
 # Set CMD instead of ENTRYPOINT to avoid early exit
-CMD ["/livekit-server", "--config", "/config.yaml"]
+CMD sh -c "/livekit-server --config /config.yaml & tail -f /dev/null"
 
 
 
