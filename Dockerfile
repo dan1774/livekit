@@ -18,7 +18,7 @@ COPY config.yaml /config.yaml
 COPY health.go /health.go
 RUN go build -o health-server /health.go
 
-#“Hey, my app is alive and listening on port 8080 — check here!”
+#Hey, my app is alive and listening on port 8080 — check here!
 EXPOSE 8080
 
 # Run both livekit and health server
