@@ -43,11 +43,11 @@ COPY --from=builder /workspace/livekit-server /livekit-server
 # Copy config.yaml from your repo into the container
 COPY --from=builder /workspace/livekit-server /livekit-server
 
-# Copy config and start script
+# Copy config
 COPY config.yaml /config.yaml
-COPY start.sh /start.sh
-RUN chmod +x /start.sh
 
-ENTRYPOINT ["/bin/sh", "/start.sh"]
+# Set CMD instead of ENTRYPOINT to avoid early exit
+CMD ["/livekit-server", "--config", "/config.yaml"]
+
 
 
