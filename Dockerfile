@@ -40,5 +40,9 @@ FROM alpine
 
 COPY --from=builder /workspace/livekit-server /livekit-server
 
-# Run the binary.
-ENTRYPOINT ["/livekit-server"]
+# Copy config.yaml from your repo into the container
+COPY config.yaml /config.yaml
+
+# Run the server with the config file
+ENTRYPOINT ["/livekit-server", "--config", "/config.yaml"]
+
